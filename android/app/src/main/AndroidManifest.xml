@@ -2,10 +2,14 @@
 
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-feature android:name="android.software.leanback" android:required="false" />
     <application
         android:label="iptv_app"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:banner="@drawable/banner"
+        android:enableOnBackInvokedCallback="true"
+        >
         <meta-data
         android:name="com.google.android.tv.banner"
         android:resource="@drawable/banner"/>
@@ -29,6 +33,7 @@
               />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" android:required="false" />
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>

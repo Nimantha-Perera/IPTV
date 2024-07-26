@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iptv_app/Screens/Bottom%20Nav/bottom_nav_bar.dart';
-import 'package:iptv_app/Screens/Naigate_Screens/channels_view.dart';
+import 'package:iptv_app/Channels/channels_view.dart';
 import 'package:iptv_app/Screens/Naigate_Screens/main_menu.dart';
+import 'package:iptv_app/FoodOder/oder_foods.dart';
 
 
 void main() {
@@ -27,7 +28,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Widget> _screens = [
     MainMenu(),
-    ChannelsView()
+    ChannelsView(),
+    OrderFoodsScreen(),
   ];
 
   final List<BottomNavigationBarItem> _navItems = [

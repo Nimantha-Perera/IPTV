@@ -16,7 +16,7 @@ class Channels extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(btnText),
-      tileColor: isActive ? Colors.blue : Colors.transparent,
+      tileColor: isActive ? const Color.fromARGB(255, 255, 255, 255) : Color.fromARGB(0, 0, 0, 0),
       onTap: () => onButtonPressed(btnText),
     );
   }

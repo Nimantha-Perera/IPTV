@@ -26,7 +26,7 @@ class BottomNavBar extends StatelessWidget {
         items: items,
         currentIndex: currentIndex,
         onTap: onTap,
-        backgroundColor: Colors.blue, // Set background color
+        backgroundColor: const Color.fromARGB(255, 65, 65, 65), // Set background color
         type: BottomNavigationBarType.fixed, // To ensure the background color covers the whole bar
         elevation: 10, // Add elevation for a shadow effect
         selectedFontSize: 14, // Adjust font size of selected item

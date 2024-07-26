@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "10714819844",
+    "project_id": "iptv-36bc0",
+    "storage_bucket": "iptv-36bc0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:10714819844:android:0d1cdb253901c81092b451",
+        "android_client_info": {
+          "package_name": "com.example.iptv_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaTR2wkD0-s6CIH8dffozvlIdwHrbJjmE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

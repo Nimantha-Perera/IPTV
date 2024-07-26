@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
+import 'package:iptv_app/CustomorData/customor_data.dart';
 
 class MainMenu extends StatefulWidget {
   const MainMenu({super.key});
@@ -9,30 +10,84 @@ class MainMenu extends StatefulWidget {
 }
 
 class _MainMenuState extends State<MainMenu> {
+  String formattedDate = '';
+  String formattedTime = '';
+  String roomNumber = 'Loading...';
+  String customerName = 'Loading...';
+  String customerSecruty = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _updateDateTime();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // Retrieve the passed arguments
+    final Object? arguments = ModalRoute.of(context)?.settings.arguments;
+    if (arguments is Map<String, dynamic>) {
+      setState(() {
+        customerSecruty = arguments['roomNumber'] ?? 'No room number';
+      });
+      _fetchCustomerData();
+    } else if (arguments is String) {
+      setState(() {
+        customerSecruty = arguments;
+      });
+      _fetchCustomerData();
+    }
+  }
+
+  void _updateDateTime() {
+    DateTime now = DateTime.now();
+    formattedDate = DateFormat('yyyy-MM-dd').format(now);
+    formattedTime = DateFormat('HH:mm:ss').format(now);
+    setState(() {});
+  }
+
+  Future<void> _fetchCustomerData() async {
+    try {
+      final customer = await fetchCustomerData(customerSecruty);
+
+      setState(() {
+        roomNumber = customer.roomNumber;
+        customerName = customer.customerName;
+      });
+    } catch (e) {
+      print('Error fetching customer data: $e');
+      setState(() {
+        roomNumber = 'Error';
+        customerName = 'Error';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.all(25.0),
+            padding: const EdgeInsets.all(0),
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: const Color.fromARGB(255, 120, 185, 238),
+                color: const Color.fromARGB(255, 255, 255, 255),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.thermostat, size: 30, color: Colors.white),
+                      Icon(Icons.thermostat, size: 30, color: Color.fromARGB(255, 255, 0, 0)),
                       const SizedBox(width: 5),
                       Text("26 C",
                           style: TextStyle(
                               fontSize: 30,
                               fontWeight: FontWeight.normal,
-                              color: Colors.white)),
+                              color: const Color.fromARGB(255, 0, 0, 0))),
                     ],
                   ),
                   Row(
@@ -43,18 +98,18 @@ class _MainMenuState extends State<MainMenu> {
                           style: TextStyle(
                               fontSize: 30,
                               fontWeight: FontWeight.normal,
-                              color: Colors.white)),
+                              color: const Color.fromARGB(255, 0, 0, 0))),
                     ],
                   ),
                   Row(
                     children: [
                       Icon(Icons.access_time, size: 30, color: Colors.white),
                       const SizedBox(width: 5),
-                      Text("10:00 AM",
+                      Text(formattedTime, // Display the formatted time
                           style: TextStyle(
                               fontSize: 30,
                               fontWeight: FontWeight.normal,
-                              color: Colors.white)),
+                              color: const Color.fromARGB(255, 0, 0, 0))),
                     ],
                   ),
                 ],
@@ -74,7 +129,25 @@ class _MainMenuState extends State<MainMenu> {
                 ],
               ),
             ),
-          )
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              width: double.infinity,
+              height: 100,
+              color: const Color.fromARGB(255, 90, 90, 90), // Optional: Add a background color to distinguish the container
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Room Number: $roomNumber",
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  SizedBox(width: 50,),
+                  Text("Customer Name: $customerName",
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
