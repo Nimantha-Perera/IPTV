@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginUser extends StatefulWidget {
@@ -24,7 +25,6 @@ class _LoginUserState extends State<LoginUser> {
     String? savedRoomUserName = prefs.getString('roomUserName');
 
     if (savedRoomUserName != null && savedRoomUserName.isNotEmpty) {
-      // If user is already logged in, navigate to home screen
       Navigator.pushReplacementNamed(context, '/home', arguments: savedRoomUserName);
     }
   }
@@ -34,27 +34,33 @@ class _LoginUserState extends State<LoginUser> {
   Future<void> _login() async {
     if (_formKey.currentState?.validate() ?? false) {
       try {
+        final FirebaseAuth _auth = FirebaseAuth.instance;
         final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-        // Fetch customer data based on room number as document ID
-        DocumentSnapshot doc = await _firestore
-            .collection('customers')
-            .doc(roomUserName) // Use roomNumber as document ID
-            .get();
+        // Authenticate anonymously
+        UserCredential userCredential = await _auth.signInAnonymously();
+        User? user = userCredential.user;
 
-        if (doc.exists) {
-          final data = doc.data() as Map<String, dynamic>;
-          final customerName = data['customerName'];
+        if (user != null) {
+          // Fetch customer data based on room number as document ID
+          DocumentSnapshot doc = await _firestore
+              .collection('customers')
+              .doc(user.uid) // Use uid as document ID
+              .get();
 
-          // Save room number to SharedPreferences
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setString('roomUserName', roomUserName);
+          if (doc.exists) {
+            final data = doc.data() as Map<String, dynamic>;
+            final customerName = data['customerName'];
 
-          // Show modal with customer details and navigate with room number
-          _showCustomerDetails(customerName);
-        } else {
-          // Handle case where no document is found
-          _showErrorDialog('No customer found with this room number');
+            // Save room number to SharedPreferences
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.setString('roomUserName', roomUserName);
+
+            // Show modal with customer details and navigate with room number
+            _showCustomerDetails(customerName);
+          } else {
+            _showErrorDialog('No customer found with this room number');
+          }
         }
       } catch (e) {
         print('Error fetching data: $e');
@@ -74,7 +80,6 @@ class _LoginUserState extends State<LoginUser> {
             TextButton(
               onPressed: () {
                 Navigator.pushReplacementNamed(context, '/home', arguments: roomUserName);
-                // You can navigate to another screen or perform additional actions here
               },
               child: const Text('OK'),
             ),
@@ -107,10 +112,10 @@ class _LoginUserState extends State<LoginUser> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-        backgroundColor: Colors.blueAccent,
-      ),
+      // appBar: AppBar(
+      //   title: const Text('Login'),
+      //   backgroundColor: Colors.blueAccent,
+      // ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
@@ -118,11 +123,14 @@ class _LoginUserState extends State<LoginUser> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  'Login',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
+                Container(
+                  margin: EdgeInsets.only(bottom: 100),
+                  child: const Text(
+                    'Login IPTV Room',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -130,27 +138,30 @@ class _LoginUserState extends State<LoginUser> {
                   key: _formKey,
                   child: Column(
                     children: [
-                      TextFormField(
-                        controller: _roomNumberController,
-                        decoration: InputDecoration(
-                          labelText: 'Room Number',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
+                      Container(
+                        width: 300,
+                        child: TextFormField(
+                          controller: _roomNumberController,
+                          decoration: InputDecoration(
+                            labelText: 'Customer Room Username',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            prefixIcon: const Icon(Icons.home),
                           ),
-                          prefixIcon: const Icon(Icons.home),
+                          keyboardType: TextInputType.text,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter username';
+                            }
+                            return null;
+                          },
                         ),
-                        keyboardType: TextInputType.text,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter room number';
-                          }
-                          return null;
-                        },
                       ),
                       const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: _login,
-                        child: const Text('Login'),
+                        child: const Text('LOGIN'),
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                           shape: RoundedRectangleBorder(
