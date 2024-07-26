@@ -18,6 +18,7 @@ class _LoginUserState extends State<LoginUser> {
   void initState() {
     super.initState();
     _checkLoggedInUser();
+
   }
 
   Future<void> _checkLoggedInUser() async {
@@ -29,38 +30,34 @@ class _LoginUserState extends State<LoginUser> {
     }
   }
 
+
+
   get roomUserName => _roomNumberController.text;
 
   Future<void> _login() async {
     if (_formKey.currentState?.validate() ?? false) {
       try {
-        final FirebaseAuth _auth = FirebaseAuth.instance;
         final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-        // Authenticate anonymously
-        UserCredential userCredential = await _auth.signInAnonymously();
-        User? user = userCredential.user;
+        // Fetch customer data based on room number as document ID
+        DocumentSnapshot doc = await _firestore
+            .collection('customers')
+            .doc(roomUserName) // Use roomNumber as document ID
+            .get();
 
-        if (user != null) {
-          // Fetch customer data based on room number as document ID
-          DocumentSnapshot doc = await _firestore
-              .collection('customers')
-              .doc(user.uid) // Use uid as document ID
-              .get();
+        if (doc.exists) {
+          final data = doc.data() as Map<String, dynamic>;
+          final customerName = data['customerName'];
 
-          if (doc.exists) {
-            final data = doc.data() as Map<String, dynamic>;
-            final customerName = data['customerName'];
+          // Save room number to SharedPreferences
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('roomUserName', roomUserName);
 
-            // Save room number to SharedPreferences
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            await prefs.setString('roomUserName', roomUserName);
-
-            // Show modal with customer details and navigate with room number
-            _showCustomerDetails(customerName);
-          } else {
-            _showErrorDialog('No customer found with this room number');
-          }
+          // Show modal with customer details and navigate with room number
+          _showCustomerDetails(customerName);
+        } else {
+          // Handle case where no document is found
+          _showErrorDialog('No customer found with this room number');
         }
       } catch (e) {
         print('Error fetching data: $e');

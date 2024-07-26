@@ -20,7 +20,7 @@ void showFoodAlertDialog(BuildContext context, FoodItem food) {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset(
+            Image.network(
               food.imagePath,
               height: 100,
               width: 100,
@@ -34,7 +34,7 @@ void showFoodAlertDialog(BuildContext context, FoodItem food) {
             ),
             SizedBox(height: 5),
             Text(
-              '\$${food.price.toStringAsFixed(2)}',
+              '\Rs ${food.price.toStringAsFixed(2)}/=',
               style: TextStyle(fontSize: 18, color: Colors.green),
             ),
             SizedBox(height: 20),

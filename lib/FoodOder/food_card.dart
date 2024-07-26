@@ -10,7 +10,10 @@ class FoodCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      borderRadius: BorderRadius.circular(0),
+      splashColor: Colors.blue.withOpacity(0.3), // Change the splash color here
       onTap: () {
+        
         // Handle card tap
         print('Selected: ${food.name}');
         showFoodAlertDialog(context, food);
@@ -25,7 +28,7 @@ class FoodCard extends StatelessWidget {
             Expanded(
               child: ClipRRect(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(15.0)),
-                child: Image.asset(
+                child: Image.network(
                   food.imagePath,
                   fit: BoxFit.cover,
                   width: double.infinity,

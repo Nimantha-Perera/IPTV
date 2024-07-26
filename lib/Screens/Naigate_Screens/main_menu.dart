@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:iptv_app/CustomorData/customor_data.dart';
@@ -10,6 +11,7 @@ class MainMenu extends StatefulWidget {
 }
 
 class _MainMenuState extends State<MainMenu> {
+  late Timer _timer;
   String formattedDate = '';
   String formattedTime = '';
   String roomNumber = 'Loading...';
@@ -20,6 +22,7 @@ class _MainMenuState extends State<MainMenu> {
   void initState() {
     super.initState();
     _updateDateTime();
+    _timer = Timer.periodic(Duration(seconds: 1), (Timer t) => _updateDateTime());
   }
 
   @override
@@ -41,11 +44,18 @@ class _MainMenuState extends State<MainMenu> {
     }
   }
 
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
   void _updateDateTime() {
     DateTime now = DateTime.now();
-    formattedDate = DateFormat('yyyy-MM-dd').format(now);
-    formattedTime = DateFormat('HH:mm:ss').format(now);
-    setState(() {});
+    setState(() {
+      formattedDate = DateFormat('yyyy-MM-dd').format(now);
+      formattedTime = DateFormat('HH:mm:ss').format(now);
+    });
   }
 
   Future<void> _fetchCustomerData() async {
