@@ -65,4 +65,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'iptv-36bc0.appspot.com',
     iosBundleId: 'com.example.iptvApp',
   );
+
 }

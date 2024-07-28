@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iptv_app/FoodOder/food_alert.dart';
 import 'package:iptv_app/FoodOder/food_item.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FoodCard extends StatelessWidget {
   final FoodItem food;
@@ -12,11 +13,13 @@ class FoodCard extends StatelessWidget {
     return InkWell(
       borderRadius: BorderRadius.circular(0),
       splashColor: Colors.blue.withOpacity(0.3), // Change the splash color here
-      onTap: () {
-        
+      onTap: () async {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        String? roomUserName = prefs.getString('roomUserName');
+
         // Handle card tap
         print('Selected: ${food.name}');
-        showFoodAlertDialog(context, food);
+        showFoodAlertDialog(context, food, roomUserName!);
       },
       child: Card(
         shape: RoundedRectangleBorder(
@@ -46,10 +49,9 @@ class FoodCard extends StatelessWidget {
                     child: Text(
                       food.name,
                       style: TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black
-                      ),
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
                     ),
                   ),
                   Padding(

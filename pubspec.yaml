@@ -44,6 +44,7 @@ dependencies:
   cloud_firestore: ^5.1.0
   firebase_auth: ^5.1.2
   shared_preferences: ^2.2.3
+  uuid: ^4.4.2
 #  device_info_plus: ^10.1.0
 
 
