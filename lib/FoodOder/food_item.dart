@@ -37,7 +37,7 @@ class FoodItem {
 //   // FoodItem(name: 'Steak', price: 19.99, imagePath: 'assets/images/steak.jpg'),
 // ];
 
-Future<List<FoodItem>> getFoodItems() async {
+ Future<List<FoodItem>> getFoodItems() async {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final snapshot = await _firestore.collection('availble_foods')
                                    .where('customerVisibility', isEqualTo: 'Visible')

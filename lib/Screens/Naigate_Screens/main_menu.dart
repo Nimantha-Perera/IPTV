@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:iptv_app/CustomorData/customor_data.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MainMenu extends StatefulWidget {
   const MainMenu({super.key});
@@ -73,6 +74,10 @@ class _MainMenuState extends State<MainMenu> {
         customerName = 'Error';
       });
     }
+  }
+  void ClearShredPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('roomUserName');
   }
 
   @override
@@ -154,6 +159,12 @@ class _MainMenuState extends State<MainMenu> {
                   SizedBox(width: 50,),
                   Text("Customer Name: $customerName",
                       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                      SizedBox(width: 50,),
+                ElevatedButton(onPressed: () => {
+                  Navigator.pushNamed(context, '/login'),
+                  ClearShredPreferences()
+                  
+                }, child: Text("Logout"))    
                 ],
               ),
             ),

@@ -1,22 +1,21 @@
+// Your current Dart file
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:iptv_app/CustomorData/customor_data.dart';
+import 'package:iptv_app/FoodOder/OrdersSave/order_save_firestore.dart';
 import 'package:iptv_app/FoodOder/food_item.dart';
 import 'package:iptv_app/CustomorData/customor_modal.dart';
-import 'package:uuid/uuid.dart';
 
 
 void showFoodAlertDialog(BuildContext context, FoodItem food, String customerId) async {
   if (food == null || food.imagePath == null || food.name == null || food.price == null) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('Error: Food item data is incomplete.'),
-    ));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error: Food item data is incomplete.')),
+    );
     return;
   }
 
   // Fetch customer data
   Customer customer = await fetchCustomerData(customerId);
-
   final TextEditingController quantityController = TextEditingController(text: '1');
 
   showDialog(
@@ -97,9 +96,11 @@ void showFoodAlertDialog(BuildContext context, FoodItem food, String customerId)
               int quantity = int.parse(quantityController.text);
               await saveOrderToFirestore(food, quantity, customer.customerName);
               Navigator.of(context).pop();
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('Order Confirmed for ${quantity} x ${food.name}'),
-              ));
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Order Confirmed for ${quantity} x ${food.name}'),
+                ),
+              );
             },
           ),
         ],
@@ -107,29 +108,3 @@ void showFoodAlertDialog(BuildContext context, FoodItem food, String customerId)
     },
   );
 }
-
-Future<void> saveOrderToFirestore(FoodItem food, int quantity, String customerName) async {
-  var uuid = Uuid();
-  String orderId = uuid.v4();
-
-  try {
-    CollectionReference orders = FirebaseFirestore.instance.collection('orders');
-    await orders.add({
-      'order_id': orderId,
-      'id': food.id,
-      'food': food.name,
-      'customerName': customerName,
-      'price': food.price,
-      'quantity': quantity,
-      'totalPrice': food.price * quantity,
-      'imagePath': food.imagePath,
-      'status': 'Pending',
-      'timestamp': FieldValue.serverTimestamp(),
-    });
-  } catch (e) {
-    print('Error saving order to Firestore: $e');
-  }
-}
-
-
-
