@@ -28,17 +28,49 @@ class FoodCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(15.0)),
+            if (food.imagePath != null && food.imagePath!.isNotEmpty)
+              ClipRRect(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(15.0),
+                  topRight: Radius.circular(15.0),
+                ),
                 child: Image.network(
-                  food.imagePath,
-                  fit: BoxFit.cover,
+                  food.imagePath!,
                   width: double.infinity,
-                  // Adjust the height as needed
+                  height: 100.0,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: double.infinity,
+                      height: 100.0,
+                      color: Colors.grey[200],
+                      child: Center(
+                        child: Icon(
+                          Icons.broken_image,
+                          size: 50.0,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              )
+            else
+              ClipRRect(
+                borderRadius: BorderRadius.circular(15.0),
+                child: Container(
+                  width: double.infinity,
+                  height: 100.0,
+                  color: Colors.grey[200],
+                  child: Center(
+                    child: Icon(
+                      Icons.image,
+                      size: 50.0,
+                      color: Colors.grey,
+                    ),
+                  ),
                 ),
               ),
-            ),
             Container(
               color: Colors.white,
               child: Row(

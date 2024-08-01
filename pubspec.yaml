@@ -46,6 +46,7 @@ dependencies:
   shared_preferences: ^2.2.3
   uuid: ^4.4.2
   rxdart: ^0.28.0
+  flutter_markdown: ^0.7.3
 #  device_info_plus: ^10.1.0
 
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iptv_app/ChatScreen/chat_screen.dart';
 import 'package:iptv_app/FoodOder/order_foods.dart';
 import 'package:iptv_app/Screens/Bottom%20Nav/bottom_nav_bar.dart';
 import 'package:iptv_app/Channels/channels_view.dart';
@@ -31,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
     MainMenu(),
     ChannelsView(),
     OrderFoodsScreen(),
+    ChatWithHotel()
   ];
 
   final List<BottomNavigationBarItem> _navItems = [
