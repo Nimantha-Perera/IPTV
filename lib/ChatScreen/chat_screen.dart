@@ -130,7 +130,7 @@ class _ChatWithHotelState extends State<ChatWithHotel> {
                       onPressed: () => _sendMessage(_controller.text),
                       child: const Icon(Icons.send),
                       style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white, backgroundColor: Colors.blue[700], // Text color
+                        foregroundColor: Colors.white, backgroundColor: const Color.fromARGB(255, 53, 53, 53), // Text color
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8), // Rounded corners for button
                         ),
