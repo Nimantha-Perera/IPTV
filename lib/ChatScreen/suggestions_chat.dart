@@ -16,10 +16,7 @@ class _SuggestionsChatState extends State<SuggestionsChat> {
   String? _hoveredSuggestion;
 
   final List<String> _suggestions = [
-    'Track my food order',
-    'Get help with my order',
-    'Technical help',
-    'Other'
+    
   ];
 
   @override

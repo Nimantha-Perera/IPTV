@@ -27,6 +27,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
+  int _messageCount = 5; // Example message count; replace with actual data
 
   final List<Widget> _screens = [
     MainMenu(),
@@ -56,9 +57,11 @@ class _HomeScreenState extends State<HomeScreen> {
         items: _navItems,
         currentIndex: _currentIndex,
         onTap: _onNavItemTapped,
+        messageCount: _messageCount, // Pass the message count here
       ),
     );
   }
 }
+
 
 

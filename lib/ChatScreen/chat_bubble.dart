@@ -5,12 +5,15 @@ class ChatBubble extends StatelessWidget {
   final String message;
   final bool isUserMessage;
   final bool isBotResponse;
+  final bool isAdminResponse;
+
 
   const ChatBubble({
     Key? key,
     required this.message,
     required this.isUserMessage,
     required this.isBotResponse,
+    required this.isAdminResponse,
   }) : super(key: key);
 
   @override
@@ -31,6 +34,7 @@ class ChatBubble extends StatelessWidget {
             topRight: Radius.circular(15),
             bottomLeft: isUserMessage ? Radius.circular(15) : Radius.circular(0),
             bottomRight: isUserMessage ? Radius.circular(0) : Radius.circular(15),
+
           ),
         ),
         child: MarkdownBody(
