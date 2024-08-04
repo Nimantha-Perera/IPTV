@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:iptv_app/CustomorData/customor_data.dart';
@@ -78,7 +79,20 @@ class _MainMenuState extends State<MainMenu> {
   void ClearShredPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('roomUserName');
+    final prefs2 = await SharedPreferences.getInstance();
+  await prefs2.remove('chat_history');
+   await FirebaseAuth.instance.signOut();
   }
+
+  Future<void> clearChatHistory() async {
+  
+
+}
+
+Future<void> _signOut() async {
+ 
+}
+
 
   @override
   Widget build(BuildContext context) {

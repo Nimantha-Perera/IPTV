@@ -35,7 +35,7 @@ class _ChatWithHotelState extends State<ChatWithHotel> {
     _startChat();
   }
 
-  Future<void> _startChat() async {
+   Future<void> _startChat() async {
     final userId = FirebaseAuth.instance.currentUser!.uid;
     final adminId = 'admin_uid'; // Replace with the actual admin UID
 
@@ -53,12 +53,13 @@ class _ChatWithHotelState extends State<ChatWithHotel> {
         'createdAt': FieldValue.serverTimestamp(),
       });
       _chatId = newChatDoc.id;
-      
+
       // Send the initial "Hi Admin" message
       _sendMessage("Hi Admin", isUserMessage: true);
     }
 
-    _loadMessages();
+    await _loadMessages();
+    print('Chat Document ID: $_chatId'); // Print the chat document ID
   }
 
 void _sendMessage(String message,
@@ -72,6 +73,7 @@ void _sendMessage(String message,
         'isAdminResponse': isAdminResponse,
         'timestamp': FieldValue.serverTimestamp(),
         'senderId': FirebaseAuth.instance.currentUser!.uid,
+        'chatId': _chatId,
       };
 
       await _firestore.collection('chats')
